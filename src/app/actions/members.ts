@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma, isDatabaseConfigured } from "@/lib/prisma";
+import { isAdminAuthenticated } from "@/lib/auth/server";
 import { memberInputSchema, type MemberInput } from "@/lib/validators";
 
 export type ActionResult = {
@@ -17,6 +18,18 @@ function revalidateMemberPaths(memberId?: string) {
   if (memberId) {
     revalidatePath(`/admin/members/${memberId}`);
   }
+}
+
+async function requireAdminAccess() {
+  const authenticated = await isAdminAuthenticated();
+  if (authenticated) {
+    return null;
+  }
+
+  return {
+    ok: false,
+    message: "Admin session expired. Please login again.",
+  } satisfies ActionResult;
 }
 
 export async function createMember(input: MemberInput): Promise<ActionResult> {
@@ -85,6 +98,11 @@ export async function updateMember(
   id: string,
   input: MemberInput
 ): Promise<ActionResult> {
+  const authError = await requireAdminAccess();
+  if (authError) {
+    return authError;
+  }
+
   if (!isDatabaseConfigured || !prisma) {
     return {
       ok: false,
@@ -148,6 +166,11 @@ export async function updateMember(
 }
 
 export async function deleteMember(id: string): Promise<ActionResult> {
+  const authError = await requireAdminAccess();
+  if (authError) {
+    return authError;
+  }
+
   if (!isDatabaseConfigured || !prisma) {
     return {
       ok: false,
@@ -165,6 +188,11 @@ export async function deleteMember(id: string): Promise<ActionResult> {
 }
 
 export async function verifyMember(id: string): Promise<ActionResult> {
+  const authError = await requireAdminAccess();
+  if (authError) {
+    return authError;
+  }
+
   if (!isDatabaseConfigured || !prisma) {
     return {
       ok: false,

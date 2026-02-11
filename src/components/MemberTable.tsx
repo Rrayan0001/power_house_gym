@@ -58,21 +58,32 @@ export function MemberTable({ members }: { members: MemberRow[] }) {
   const [editMember, setEditMember] = React.useState<MemberRow | null>(null);
   const [deleteTarget, setDeleteTarget] = React.useState<MemberRow | null>(null);
   const [verifyingId, setVerifyingId] = React.useState<string | null>(null);
+  const [tableMessage, setTableMessage] = React.useState<string | null>(null);
   const [deleting, startTransition] = React.useTransition();
 
   function handleDelete() {
     if (!deleteTarget) return;
+    setTableMessage(null);
     startTransition(async () => {
-      await deleteMember(deleteTarget.id);
+      const result = await deleteMember(deleteTarget.id);
+      if (!result.ok) {
+        setTableMessage(result.message ?? "Unable to delete member.");
+        return;
+      }
+      setTableMessage(null);
       setDeleteTarget(null);
     });
   }
 
   function handleVerify(id: string) {
+    setTableMessage(null);
     setVerifyingId(id);
     startTransition(async () => {
       try {
-        await verifyMember(id);
+        const result = await verifyMember(id);
+        if (!result.ok) {
+          setTableMessage(result.message ?? "Unable to verify member.");
+        }
       } finally {
         setVerifyingId(null);
       }
@@ -89,6 +100,11 @@ export function MemberTable({ members }: { members: MemberRow[] }) {
           </p>
         </div>
       </div>
+      {tableMessage && (
+        <div className="border-b border-border bg-danger/10 px-5 py-3 text-sm text-danger">
+          {tableMessage}
+        </div>
+      )}
 
       {members.length === 0 ? (
         <div className="px-5 py-8 text-center text-sm text-muted-foreground">

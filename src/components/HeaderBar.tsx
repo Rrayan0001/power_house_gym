@@ -2,7 +2,9 @@
 
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Search, Shield } from "lucide-react";
+import { LogOut, Search, Shield } from "lucide-react";
+import { logoutAdmin } from "@/app/actions/auth";
+import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
 const titleMap: Record<string, string> = {
@@ -17,6 +19,7 @@ export function HeaderBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [value, setValue] = React.useState(searchParams.get("q") ?? "");
+  const [loggingOut, startLogoutTransition] = React.useTransition();
   const title = titleMap[pathname] ?? "Member Profile";
 
   React.useEffect(() => {
@@ -37,6 +40,14 @@ export function HeaderBar() {
 
     return () => clearTimeout(handler);
   }, [value, pathname, router, searchParams]);
+
+  function handleLogout() {
+    startLogoutTransition(async () => {
+      await logoutAdmin();
+      router.replace("/admin/login");
+      router.refresh();
+    });
+  }
 
   return (
     <header className="flex flex-col gap-3 border-b border-border bg-[linear-gradient(180deg,rgba(255,252,248,0.92),rgba(255,241,224,0.86))] px-4 py-4 sm:px-6 sm:py-5 lg:flex-row lg:items-center lg:justify-between">
@@ -60,6 +71,16 @@ export function HeaderBar() {
           <Shield className="mr-2 h-4 w-4 text-accent" />
           Admin
         </div>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className="w-full sm:w-auto"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          {loggingOut ? "Logging out..." : "Logout"}
+        </Button>
       </div>
     </header>
   );
