@@ -92,7 +92,7 @@ export function MemberForm({
         const result =
           mode === "create"
             ? await createMember(form)
-            : await updateMember(memberId, form);
+            : await updateMember(memberId!, form);
 
         if (!result.ok) {
           setMessage(result.message ?? "Something went wrong.");
@@ -292,7 +292,7 @@ export function MemberForm({
           {pending || isSubmitting
             ? "Saving..."
             : submitLabel ??
-              (mode === "create" ? "Add Member" : "Update Member")}
+            (mode === "create" ? "Add Member" : "Update Member")}
         </Button>
       </div>
 

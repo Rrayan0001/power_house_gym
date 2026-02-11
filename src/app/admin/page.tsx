@@ -9,7 +9,7 @@ import {
   membershipTypeValues,
   verificationStatusValues,
 } from "@/lib/constants";
-import type { MembershipType, VerificationStatus } from "@prisma/client";
+import { Prisma, type MembershipType, type VerificationStatus } from "@prisma/client";
 
 export default async function DashboardPage({
   searchParams,
@@ -35,12 +35,12 @@ export default async function DashboardPage({
   const where = {
     ...(query
       ? {
-          OR: [
-            { name: { contains: query, mode: "insensitive" } },
-            { contact: { contains: query, mode: "insensitive" } },
-            { email: { contains: query, mode: "insensitive" } },
-          ],
-        }
+        OR: [
+          { name: { contains: query, mode: Prisma.QueryMode.insensitive } },
+          { contact: { contains: query, mode: Prisma.QueryMode.insensitive } },
+          { email: { contains: query, mode: Prisma.QueryMode.insensitive } },
+        ],
+      }
       : {}),
     ...(membershipType ? { membershipType } : {}),
     ...(verificationStatus ? { verificationStatus } : {}),
@@ -57,32 +57,32 @@ export default async function DashboardPage({
     !isDatabaseConfigured || !prisma
       ? [[], 0, 0, 0, 0, 0]
       : await prisma.$transaction([
-          prisma.member.findMany({
-            where,
-            orderBy: { createdAt: "desc" },
-          }),
-          prisma.member.count(),
-          prisma.member.count({
-            where: {
-              endDate: { gte: now },
-            },
-          }),
-          prisma.member.count({
-            where: {
-              endDate: { gte: now, lte: soon },
-            },
-          }),
-          prisma.member.count({
-            where: {
-              membershipType: "WITH_PERSONAL_TRAINER",
-            },
-          }),
-          prisma.member.count({
-            where: {
-              verificationStatus: "PENDING",
-            },
-          }),
-        ]);
+        prisma.member.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+        }),
+        prisma.member.count(),
+        prisma.member.count({
+          where: {
+            endDate: { gte: now },
+          },
+        }),
+        prisma.member.count({
+          where: {
+            endDate: { gte: now, lte: soon },
+          },
+        }),
+        prisma.member.count({
+          where: {
+            membershipType: "WITH_PERSONAL_TRAINER",
+          },
+        }),
+        prisma.member.count({
+          where: {
+            verificationStatus: "PENDING",
+          },
+        }),
+      ]);
 
   const serializedMembers = members.map(serializeMember);
 

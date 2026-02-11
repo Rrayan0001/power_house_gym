@@ -7,7 +7,7 @@ import {
   membershipTypeValues,
   verificationStatusValues,
 } from "@/lib/constants";
-import type { MembershipType, VerificationStatus } from "@prisma/client";
+import { Prisma, type MembershipType, type VerificationStatus } from "@prisma/client";
 
 export default async function MembersPage({
   searchParams,
@@ -31,9 +31,9 @@ export default async function MembersPage({
     ...(query
       ? {
           OR: [
-            { name: { contains: query, mode: "insensitive" } },
-            { contact: { contains: query, mode: "insensitive" } },
-            { email: { contains: query, mode: "insensitive" } },
+            { name: { contains: query, mode: Prisma.QueryMode.insensitive } },
+            { contact: { contains: query, mode: Prisma.QueryMode.insensitive } },
+            { email: { contains: query, mode: Prisma.QueryMode.insensitive } },
           ],
         }
       : {}),
