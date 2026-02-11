@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { HeaderBar } from "@/components/HeaderBar";
 import { MobileNav } from "@/components/MobileNav";
@@ -9,7 +10,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
       <div className="relative flex">
         <Sidebar />
         <div className="flex min-h-screen flex-1 flex-col">
-          <HeaderBar />
+          <Suspense fallback={<div className="h-[72px] w-full border-b border-border bg-surface/50" />}>
+            <HeaderBar />
+          </Suspense>
           <main className="flex-1 space-y-5 px-4 py-5 pb-24 sm:px-6 sm:py-7 lg:space-y-6 lg:pb-8">
             {children}
           </main>
