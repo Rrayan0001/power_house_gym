@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MembershipDuration {
+  ONE_MONTH     @map("1_month")
+  THREE_MONTHS  @map("3_months")
+  SIX_MONTHS    @map("6_months")
+  ONE_YEAR      @map("1_year")
+}
+
+enum MembershipType {
+  WITH_PERSONAL_TRAINER    @map("with_personal_trainer")
+  WITHOUT_PERSONAL_TRAINER @map("without_personal_trainer")
+}
+
+enum VerificationStatus {
+  PENDING  @map("pending")
+  VERIFIED @map("verified")
+}
+
+model Member {
+  id                 String             @id @default(uuid())
+  name               String
+  contact            String
+  email              String?
+  address            String             @db.Text
+  age                Int
+  gender             String
+  startDate          DateTime
+  endDate            DateTime
+  membershipDuration MembershipDuration
+  membershipType     MembershipType
+  verificationStatus VerificationStatus @default(PENDING)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@map("members")
+}
