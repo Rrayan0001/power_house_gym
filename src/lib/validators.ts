@@ -11,7 +11,6 @@ export const memberInputSchema = z.object({
       indianMobileRegex,
       "Mobile number must be 10 digits and start with 6, 7, 8, or 9"
     ),
-  email: z.string().trim().toLowerCase().email("Valid email is required"),
   address: z.string().trim().min(1, "Address is required"),
   age: z.coerce.number().int().min(12, "Age must be at least 12"),
   gender: z.string().trim().min(1, "Gender is required"),

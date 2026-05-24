@@ -29,7 +29,6 @@ export type MemberFormProps = {
 const emptyState: MemberInput = {
   name: "",
   contact: "",
-  email: "",
   address: "",
   age: 18,
   gender: "",
@@ -40,7 +39,7 @@ const emptyState: MemberInput = {
 };
 
 function RequiredMark() {
-  return <span className="ml-1 text-danger">*</span>;
+  return null;
 }
 
 export function MemberForm({
@@ -120,26 +119,21 @@ export function MemberForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
-      <p className="text-xs font-medium text-muted-foreground">
-        Fields marked with <RequiredMark /> are compulsory.
-      </p>
+      {/* removed required-field hint */}
 
       <div className="grid gap-4 md:grid-cols-2">
         <label className="space-y-2 text-sm font-semibold text-foreground">
           Full Name
-          <RequiredMark />
           <Input
             value={form.name}
             onChange={(event) => handleChange("name", event.target.value)}
             placeholder="Member name"
             autoComplete="name"
-            required
           />
         </label>
 
         <label className="space-y-2 text-sm font-semibold text-foreground">
           Mobile Number
-          <RequiredMark />
           <Input
             type="tel"
             inputMode="numeric"
@@ -150,42 +144,24 @@ export function MemberForm({
             value={form.contact}
             onChange={(event) => handleMobileChange(event.target.value)}
             placeholder="10-digit mobile number"
-            required
-          />
-        </label>
-
-        <label className="space-y-2 text-sm font-semibold text-foreground">
-          Email
-          <RequiredMark />
-          <Input
-            type="email"
-            value={form.email}
-            onChange={(event) => handleChange("email", event.target.value)}
-            placeholder="name@example.com"
-            autoComplete="email"
-            required
           />
         </label>
 
         <label className="space-y-2 text-sm font-semibold text-foreground">
           Age
-          <RequiredMark />
           <Input
             type="number"
             min={12}
             value={form.age}
             onChange={(event) => handleChange("age", Number(event.target.value))}
-            required
           />
         </label>
 
         <label className="space-y-2 text-sm font-semibold text-foreground">
           Gender
-          <RequiredMark />
           <Select
             value={form.gender}
             onChange={(event) => handleChange("gender", event.target.value)}
-            required
           >
             <option value="">Select gender</option>
             {genderOptions.map((option) => (
@@ -198,12 +174,10 @@ export function MemberForm({
 
         <label className="space-y-2 text-sm font-semibold text-foreground md:col-span-2">
           Address
-          <RequiredMark />
           <textarea
             value={form.address}
             onChange={(event) => handleChange("address", event.target.value)}
             placeholder="Street address"
-            required
             className="min-h-[110px] w-full rounded-xl border border-border bg-surface/70 px-3 py-2 text-base text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 sm:min-h-[96px] sm:text-sm"
           />
         </label>
@@ -212,29 +186,24 @@ export function MemberForm({
       <div className="grid gap-4 md:grid-cols-3">
         <label className="space-y-2 text-sm font-semibold text-foreground">
           Start Date
-          <RequiredMark />
           <Input
             type="date"
             value={form.startDate}
             onChange={(event) => handleChange("startDate", event.target.value)}
-            required
           />
         </label>
 
         <label className="space-y-2 text-sm font-semibold text-foreground">
           End Date
-          <RequiredMark />
           <Input
             type="date"
             value={form.endDate}
             onChange={(event) => handleChange("endDate", event.target.value)}
-            required
           />
         </label>
 
         <label className="space-y-2 text-sm font-semibold text-foreground">
           Duration
-          <RequiredMark />
           <Select
             value={form.membershipDuration}
             onChange={(event) =>
@@ -243,7 +212,6 @@ export function MemberForm({
                 event.target.value as MemberInput["membershipDuration"]
               )
             }
-            required
           >
             {membershipDurationOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -257,7 +225,6 @@ export function MemberForm({
       <div className="grid gap-4 md:grid-cols-2">
         <label className="space-y-2 text-sm font-semibold text-foreground">
           Membership Type
-          <RequiredMark />
           <Select
             value={form.membershipType}
             onChange={(event) =>
@@ -266,7 +233,6 @@ export function MemberForm({
                 event.target.value as MemberInput["membershipType"]
               )
             }
-            required
           >
             {membershipTypeOptions.map((option) => (
               <option key={option.value} value={option.value}>

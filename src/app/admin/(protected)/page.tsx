@@ -38,7 +38,6 @@ export default async function DashboardPage({
         OR: [
           { name: { contains: query, mode: Prisma.QueryMode.insensitive } },
           { contact: { contains: query, mode: Prisma.QueryMode.insensitive } },
-          { email: { contains: query, mode: Prisma.QueryMode.insensitive } },
         ],
       }
       : {}),

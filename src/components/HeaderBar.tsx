@@ -63,7 +63,7 @@ export function HeaderBar() {
           <Input
             value={value}
             onChange={(event) => setValue(event.target.value)}
-            placeholder="Search by name, mobile, or email"
+            placeholder="Search by name or mobile"
             className="pl-9"
           />
         </div>

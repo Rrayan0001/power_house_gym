@@ -47,29 +47,17 @@ export async function createMember(input: MemberInput): Promise<ActionResult> {
 
   const data = parsed.data;
   const existing = await prisma.member.findFirst({
-    where: {
-      OR: [
-        { contact: data.contact },
-        { email: { equals: data.email, mode: "insensitive" } },
-      ],
-    },
+    where: { contact: data.contact },
     select: {
       id: true,
       contact: true,
-      email: true,
     },
   });
 
   if (existing) {
-    if (existing.contact === data.contact) {
-      return {
-        ok: false,
-        message: "Mobile number already exists. Duplicate entry is not allowed.",
-      };
-    }
     return {
       ok: false,
-      message: "Email already exists. Duplicate entry is not allowed.",
+      message: "Mobile number already exists. Duplicate entry is not allowed.",
     };
   }
 
@@ -77,7 +65,6 @@ export async function createMember(input: MemberInput): Promise<ActionResult> {
     data: {
       name: data.name,
       contact: data.contact,
-      email: data.email,
       address: data.address,
       age: data.age,
       gender: data.gender,
@@ -119,28 +106,18 @@ export async function updateMember(
   const duplicate = await prisma.member.findFirst({
     where: {
       id: { not: id },
-      OR: [
-        { contact: data.contact },
-        { email: { equals: data.email, mode: "insensitive" } },
-      ],
+      contact: data.contact,
     },
     select: {
       id: true,
       contact: true,
-      email: true,
     },
   });
 
   if (duplicate) {
-    if (duplicate.contact === data.contact) {
-      return {
-        ok: false,
-        message: "Mobile number already exists. Duplicate entry is not allowed.",
-      };
-    }
     return {
       ok: false,
-      message: "Email already exists. Duplicate entry is not allowed.",
+      message: "Mobile number already exists. Duplicate entry is not allowed.",
     };
   }
 
@@ -149,7 +126,6 @@ export async function updateMember(
     data: {
       name: data.name,
       contact: data.contact,
-      email: data.email,
       address: data.address,
       age: data.age,
       gender: data.gender,

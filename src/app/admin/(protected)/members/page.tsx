@@ -33,7 +33,6 @@ export default async function MembersPage({
           OR: [
             { name: { contains: query, mode: Prisma.QueryMode.insensitive } },
             { contact: { contains: query, mode: Prisma.QueryMode.insensitive } },
-            { email: { contains: query, mode: Prisma.QueryMode.insensitive } },
           ],
         }
       : {}),

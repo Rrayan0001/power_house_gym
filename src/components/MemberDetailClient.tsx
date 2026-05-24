@@ -21,7 +21,6 @@ function toFormDefaults(member: MemberRow): Partial<MemberInput> {
   return {
     name: member.name,
     contact: member.contact,
-    email: member.email ?? "",
     address: member.address,
     age: member.age,
     gender: member.gender,
@@ -63,7 +62,6 @@ export function MemberDetailClient({ member }: { member: MemberRow }) {
           </p>
           <h3 className="text-2xl font-semibold text-foreground">{member.name}</h3>
           <p className="text-sm text-muted-foreground">{member.contact}</p>
-          <p className="text-sm text-muted-foreground">{member.email ?? "-"}</p>
           <div className="mt-3">
             <Badge variant={status === "VERIFIED" ? "accent" : "muted"}>
               {formatVerificationStatus(status)}

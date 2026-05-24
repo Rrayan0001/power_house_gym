@@ -63,7 +63,7 @@ export function AdminLoginForm() {
             onChange={(event) => setPassword(event.target.value)}
             placeholder="Enter admin password"
             className="pl-9"
-            required
+          
           />
         </div>
       </label>

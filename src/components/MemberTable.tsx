@@ -21,7 +21,6 @@ export type MemberRow = {
   id: string;
   name: string;
   contact: string;
-  email: string | null;
   address: string;
   age: number;
   gender: string;
@@ -41,7 +40,6 @@ function toFormDefaults(member: MemberRow): Partial<MemberInput> {
   return {
     name: member.name,
     contact: member.contact,
-    email: member.email ?? "",
     address: member.address,
     age: member.age,
     gender: member.gender,
@@ -119,7 +117,6 @@ export function MemberTable({ members }: { members: MemberRow[] }) {
                   <div>
                     <h4 className="text-base font-semibold text-foreground">{member.name}</h4>
                     <p className="text-sm text-muted-foreground">{member.contact}</p>
-                    <p className="text-sm text-muted-foreground">{member.email ?? "-"}</p>
                   </div>
                   <Badge
                     variant={member.verificationStatus === "VERIFIED" ? "accent" : "muted"}
@@ -186,7 +183,6 @@ export function MemberTable({ members }: { members: MemberRow[] }) {
                 <tr>
                   <th className="px-5 py-3">Name</th>
                   <th className="px-5 py-3">Mobile</th>
-                  <th className="px-5 py-3">Email</th>
                   <th className="px-5 py-3">Gender</th>
                   <th className="px-5 py-3">Membership</th>
                   <th className="px-5 py-3">Status</th>
@@ -204,9 +200,6 @@ export function MemberTable({ members }: { members: MemberRow[] }) {
                   >
                     <td className="px-5 py-4 font-semibold text-foreground">{member.name}</td>
                     <td className="px-5 py-4 text-muted-foreground">{member.contact}</td>
-                    <td className="px-5 py-4 text-muted-foreground">
-                      {member.email ?? "-"}
-                    </td>
                     <td className="px-5 py-4">
                       <Badge variant="muted">{member.gender}</Badge>
                     </td>
@@ -284,10 +277,6 @@ export function MemberTable({ members }: { members: MemberRow[] }) {
               <div>
                 <p className="text-xs uppercase tracking-[0.2em]">Contact</p>
                 <p className="text-foreground">{viewMember.contact}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em]">Email</p>
-                <p className="text-foreground">{viewMember.email ?? "-"}</p>
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.2em]">Gender</p>
